@@ -1,0 +1,55 @@
+{
+    "format_version": 2,
+    "header": {
+        "description": "pack.description",
+        "name": "Robot's BP",
+        "uuid": "b460db60-f397-4747-a542-41b8d2e881e7",
+        "min_engine_version": [
+            1,
+            20,
+            10
+        ],
+        "version": [
+            1,
+            0,
+            0
+        ]
+    },
+    "dependencies": [
+        {
+            "module_name": "@minecraft/server",
+            "version": "1.9.0"
+        },
+        {
+            "module_name": "@minecraft/server-ui",
+            "version": "1.1.0"
+        },
+        {
+            "module_name": "@minecraft/common",
+            "version": "1.1.0"
+        }
+    ],
+    "modules": [
+        {
+            "type": "data",
+            "uuid": "419867b2-1581-4e32-8eaa-d23b93d59e66",
+            "version": [
+                1,
+                0,
+                0
+            ]
+        },
+        {
+            "entry": "scripts/src/main.js",
+            "language": "javascript",
+            "type": "script",
+            "uuid": "bcfe7ae1-ad20-43e6-9ebd-9bb93bd78bd0",
+            "version": [
+                1,
+                0,
+                0
+            ]
+        }
+        
+    ]
+}

@@ -1,0 +1,564 @@
+{
+    "format_version": "1.20.41",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "allanz:spider_robot",
+            "is_spawnable": true,
+            "is_summonable": true,
+            "properties": {
+                "allanz:spawn": {
+                    "client_sync": true,
+                    "default": 0,
+                    "range": [
+                        0,
+                        1
+                    ],
+                    "type": "int"
+                },
+                "allanz:death": {
+                    "client_sync": true,
+                    "default": 0,
+                    "range": [
+                        0,
+                        1
+                    ],
+                    "type": "int"
+                },
+                "allanz:hit": {
+                    "client_sync": true,
+                    "default": 0,
+                    "range": [
+                        0,
+                        10
+                    ],
+                    "type": "int"
+                },
+                "color:red": {
+                    "client_sync": true,
+                    "default": 0,
+                    "range": [
+                        0,
+                        255
+                    ],
+                    "type": "int"
+                },
+                "spider_robot:tnt_on": {
+                    "client_sync": true,
+                    "default": 0,
+                    "range": [
+                        0,
+                        1
+                    ],
+                    "type": "int"
+                }
+            }
+        },
+        "component_groups": {
+            "default": {
+                "minecraft:health": {
+                    "value": 20,
+                    "max": 20
+                },
+                "minecraft:physics": {},
+                "minecraft:collision_box": {
+                    "width": 1.4,
+                    "height": 1.3
+                },
+                "minecraft:type_family": {
+                    "family": [
+                        "monster"
+                    ]
+                },
+                "minecraft:knockback_resistance": {
+                    "value": 0.5
+                },
+                "minecraft:nameable": {
+                    "always_show": true,
+                    "allow_name_tag_renaming": false
+                },
+                "minecraft:breathable": {
+                    "total_supply": 15,
+                    "suffocate_time": 0,
+                    "breathes_air": true,
+                    "breathes_water": false
+                }
+            },
+            "move": {
+                "minecraft:movement": {
+                    "value": 0.3
+                },
+                "minecraft:movement.basic": {
+                    "max_turn": 30
+                },
+                "minecraft:navigation.walk": {
+                    "can_walk_in_lava": true,
+                    "avoid_damage_blocks": true,
+                    "can_pass_doors": true,
+                    "can_jump": true
+                },
+                "minecraft:behavior.float": {
+                    "priority": 0
+                },
+                "minecraft:jump.static": {
+                    "jump_power": 0.42
+                },
+                "minecraft:behavior.random_look_around": {
+                    "priority": 5
+                },
+                "minecraft:behavior.look_at_target": {
+                    "look_distance": 8,
+                    "probability": 0.02,
+                    "angle_of_view_vertical": 360,
+                    "angle_of_view_horizontal": 360
+                },
+                "minecraft:behavior.random_stroll": {
+                    "priority": 5,
+                    "interval": 120,
+                    "xz_dist": 10,
+                    "y_dist": 7
+                }
+            },
+            "hurt": {
+                "minecraft:timer": {
+                    "time": 3,
+                    "looping": true,
+                    "time_down_event": {
+                        "event": "allanz:remove_hurt",
+                        "target": "self"
+                    }
+                }
+            },
+            "attack": {
+                "minecraft:attack": {
+                    "damage": 5
+                },
+                "minecraft:behavior.melee_attack": {
+                    "priority": 1
+                }
+            },
+            "other": {
+                "minecraft:behavior.nearest_attackable_target": {
+                    "priority": 0,
+                    "must_see": true,
+                    "entity_types": [
+                        {
+                            "filters": {
+                                "test": "is_family",
+                                "subject": "other",
+                                "value": "player"
+                            },
+                            "max_dist": 16.0
+                        }
+                    ]
+                },
+                "minecraft:interact": {
+                    "interactions": [
+                        {
+                            "interact_text": "Fire",
+                            "take_item": true,
+                            "on_interact": {
+                                "filters": [
+                                    {
+                                        "test": "int_property",
+                                        "domain": "spider_robot:tnt_on",
+                                        "operator": "==",
+                                        "value": 0
+                                    }
+                                ],
+                                "target": "self",
+                                "event": "action"
+                            }
+                        }
+                    ]
+                },
+                "minecraft:damage_sensor": {
+                    "triggers": [
+                        {
+                            "on_damage": {
+                                "filters": [
+                                    {
+                                        "all_of": [
+                                            {
+                                                "test": "int_property",
+                                                "domain": "allanz:death",
+                                                "operator": "==",
+                                                "value": 0
+                                            },
+                                            {
+                                                "test": "has_damage",
+                                                "operator": "==",
+                                                "value": "fatal"
+                                            },
+                                            {
+                                                "test": "is_variant",
+                                                "operator": "==",
+                                                "value": 0
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "target": "self",
+                                "event": "allanz:explode"
+                            },
+                            "deals_damage": false
+                        },
+                        {
+                            "cause": "all",
+                            "on_damage": {
+                                "filters": [
+                                    {
+                                        "all_of": [
+                                            {
+                                                "test": "int_property",
+                                                "domain": "allanz:hit",
+                                                "operator": "<=",
+                                                "value": 5
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "target": "self",
+                                "event": "allanz:hit"
+                            },
+                            "deals_damage": true
+                        },
+                        {
+                            "cause": "fire_tick",
+                            "on_damage": {
+                                "filters": [
+                                    {
+                                        "all_of": [
+                                            {
+                                                "test": "int_property",
+                                                "domain": "spider_robot:tnt_on",
+                                                "operator": "==",
+                                                "value": 0
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "target": "self",
+                                "event": "action"
+                            },
+                            "deals_damage": true
+                        },
+                        {
+                            "cause": "fire",
+                            "on_damage": {
+                                "filters": [
+                                    {
+                                        "all_of": [
+                                            {
+                                                "test": "int_property",
+                                                "domain": "spider_robot:tnt_on",
+                                                "operator": "==",
+                                                "value": 0
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "target": "self",
+                                "event": "action"
+                            },
+                            "deals_damage": true
+                        }
+                    ]
+                },
+                "minecraft:environment_sensor": {
+                    "triggers": [
+                        {
+                            "event": "hit",
+                            "target": "self",
+                            "filters": {
+                                "all_of": {
+                                    "all_of": [
+                                        {
+                                            "test": "int_property",
+                                            "domain": "allanz:hit",
+                                            "operator": ">",
+                                            "value": 5
+                                        },
+                                        {
+                                            "test": "has_tag",
+                                            "operator": "!=",
+                                            "value": "hurt"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "filters": [
+                                {
+                                    "all_of": {
+                                        "all_of": [
+                                            {
+                                                "test": "int_property",
+                                                "domain": "color:red",
+                                                "operator": "==",
+                                                "value": 255
+                                            },
+                                            {
+                                                "test": "int_property",
+                                                "domain": "allanz:death",
+                                                "operator": "==",
+                                                "value": 0
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "target": "self",
+                            "event": "allanz:explode"
+                        },
+                        {
+                            "filters": [
+                                {
+                                    "all_of": [
+                                        {
+                                            "test": "int_property",
+                                            "domain": "spider_robot:tnt_on",
+                                            "operator": "==",
+                                            "value": 0
+                                        },
+                                        {
+                                            "any_of": [
+                                                {
+                                                    "test": "has_damage",
+                                                    "value": "fire"
+                                                },
+                                                {
+                                                    "test": "has_damage",
+                                                    "value": "fire_tick"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "target": "self",
+                            "event": "action"
+                        },
+                        {
+                            "filters": [
+                                {
+                                    "all_of": {
+                                        "all_of": [
+                                            {
+                                                "test": "int_property",
+                                                "domain": "spider_robot:tnt_on",
+                                                "operator": "==",
+                                                "value": 1
+                                            },
+                                            {
+                                                "test": "in_water",
+                                                "value": true
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "target": "self",
+                            "event": "tnt_off"
+                        },
+                        {
+                            "filters": [
+                                {
+                                    "all_of": {
+                                        "all_of": [
+                                            {
+                                                "test": "int_property",
+                                                "domain": "spider_robot:tnt_on",
+                                                "operator": "==",
+                                                "value": 1
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "target": "self",
+                            "event": "color:red"
+                        }
+                    ]
+                }
+            },
+            "move_0": {
+                "minecraft:movement": {
+                    "value": 0
+                }
+            },
+            "explode": {
+                "minecraft:damage_sensor": {
+                    "triggers": [
+                        {
+                            "cause": "all",
+                            "deals_damage": false
+                        }
+                    ]
+                },
+                "minecraft:explode": {
+                    "fuse_length": 1.75,
+                    "fuse_lit": true,
+                    "power": 4,
+                    "causes_fire": false
+                }
+            },
+            "tnt": {
+                "minecraft:variant": {
+                    "value": 0
+                }
+            },
+            "furnece": {
+                "minecraft:variant": {
+                    "value": 1
+                }
+            },
+            "chest": {
+                "minecraft:variant": {
+                    "value": 2
+                }
+            },
+            "craft": {
+                "minecraft:variant": {
+                    "value": 3
+                }
+            }
+        },
+        "events": {
+            "minecraft:entity_spawned": {
+                "filters": {
+                    "test": "int_property",
+                    "domain": "allanz:spwan",
+                    "operator": "==",
+                    "value": 0
+                },
+                "add": {
+                    "component_groups": [
+                        "default",
+                        "attack",
+                        "move",
+                        "other",
+                        "tnt"
+                    ]
+                }
+            },
+            "allanz:hit": {
+                "set_property": {
+                    "allanz:hit": "math.random(0, 10)"
+                }
+            },
+            "hit": {
+                "remove": {
+                    "component_groups": [
+                        "attack",
+                        "move"
+                    ]
+                },
+                "add": {
+                    "component_groups": [
+                        "hurt",
+                        "move_0"
+                    ]
+                },
+                "queue_command": {
+                    "command": "tag @s add hurt"
+                }
+            },
+            "allanz:remove_hurt": {
+                "add": {
+                    "component_groups": [
+                        "attack",
+                        "move"
+                    ]
+                },
+                "remove": {
+                    "component_groups": [
+                        "hurt",
+                        "move_0"
+                    ]
+                },
+                "set_property": {
+                    "allanz:hit": 0
+                },
+                "queue_command": {
+                    "command": "tag @s remove hurt"
+                }
+            },
+            "allanz:explode": {
+                "add": {
+                    "component_groups": [
+                        "explode"
+                    ]
+                },
+                "remove": {
+                    "component_groups": [
+                        "attack",
+                        "move"
+                    ]
+                },
+                "set_property": {
+                    "allanz:death": 1,
+                    "allanz:hit": 0
+                }
+            },
+            "color:red": {
+                "filters": {
+                    "all_of": {
+                        "all_of": [
+                            {
+                                "test": "int_property",
+                                "domain": "color:red",
+                                "operator": "<",
+                                "value": 255
+                            },
+                            {
+                                "test": "in_water",
+                                "value": false
+                            }
+                        ]
+                    }
+                },
+                "set_property": {
+                    "color:red": "q.property('color:red') + 1"
+                }
+            },
+            "color:remove_red": {
+                "filters": {
+                    "test": "int_property",
+                    "domain": "color:red",
+                    "operator": ">",
+                    "value": 0
+                },
+                "set_property": {
+                    "color:red": "q.property('color:red') - 1"
+                }
+            },
+            "action": {
+                "set_property": {
+                    "spider_robot:tnt_on": 1
+                }
+            },
+            "off": {
+                "filters": {
+                    "test": "int_property",
+                    "domain": "color:red",
+                    "operator": "==",
+                    "value": 0
+                },
+                "set_property": {
+                    "spider_robot:tnt_on": 0
+                }
+            },
+            "tnt_off": {
+                "sequence": [
+                    {
+                        "trigger": "color:remove_red"
+                    },
+                    {
+                        "trigger": "off"
+                    }
+                ]
+            }
+        }
+    }
+}
