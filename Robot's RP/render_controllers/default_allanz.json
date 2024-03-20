@@ -1,0 +1,22 @@
+{
+    "format_version": "1.20.41",
+    "render_controllers": {
+        "controller.render.spider_robot": {
+            "geometry": "Geometry.default",
+            "materials": [
+                {
+                    "*": "Material.default"
+                }
+            ],
+            "textures": [
+                "Texture.default"
+            ],
+            "overlay_color": {
+                "r":"q.property('color:red')/255",
+                "g":0,
+                "b":0,
+                "a":"Math.min(1*(q.property('color:red')/255),0.5)"
+            }
+        }
+    }
+}

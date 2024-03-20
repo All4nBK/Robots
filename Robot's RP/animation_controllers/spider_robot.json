@@ -1,0 +1,45 @@
+{
+	"format_version": "1.19.0",
+	"animation_controllers": {
+		"controller.animation.spider_robot": {
+			"states": {
+				"default": {
+					"animations": ["idle"],
+					"transitions": [
+						{"walk": "q.modified_move_speed >= 0.1"},
+						{"death": "q.property('allanz:death') == 1"},
+						{"hurt": "q.property('allanz:hit') > 5"}
+					],
+					"blend_transition": 0.55,
+					"blend_via_shortest_path": true
+				},
+				"walk": {
+					"animations": ["walk"],
+					"transitions": [
+						{"default": "q.modified_move_speed <= 0.09"},
+						{"death": "q.property('allanz:death') == 1"},
+						{"hurt": "q.property('allanz:hit') > 5"}
+					]
+				},
+				"hurt": {
+					"animations": ["hurt"],
+					"particle_effects": [
+						{
+							"effect": "hit",
+							"locator": "hit"
+						}
+					],
+					"transitions": [
+						{"death": "q.property('allanz:death') == 1"},
+						{"default": "q.property('allanz:hit') <= 5"}
+					],
+					"blend_transition": 0.1,
+					"blend_via_shortest_path": true
+				},
+				"death": {
+					"animations": ["death"]
+				}
+			}
+		}
+	}
+}

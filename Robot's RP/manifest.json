@@ -1,0 +1,29 @@
+{
+    "format_version": 2,
+    "header": {
+        "description": "pack.description",
+        "name": "Robot's RP",
+        "uuid": "3cd6082e-7198-4f33-8299-78c0a15cc9a7",
+        "min_engine_version": [
+            1,
+            20,
+            10
+        ],
+        "version": [
+            1,
+            0,
+            0
+        ]
+    },
+    "modules": [
+        {
+            "type": "resources",
+            "uuid": "ff38af43-c267-47c2-9cf7-418d8b621f89",
+            "version": [
+                1,
+                0,
+                0
+            ]
+        }
+    ]
+}

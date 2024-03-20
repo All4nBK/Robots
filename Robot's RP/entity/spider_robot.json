@@ -1,0 +1,39 @@
+{
+    "format_version": "1.20.41",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "allanz:spider_robot",
+            "materials": {
+                "default": "entity_alphablend"
+            },
+            "textures": {
+                "default": "textures/entity/spider_robot"
+            },
+            "geometry": {
+                "default": "geometry.spider_robor"
+            },
+            "animations": {
+                "idle":"animation.spider_robot.idle",
+                "walk":"animation.spider_robot.walk",
+                "death":"animation.spider_robot.death",
+                "hurt":"animation.spider_robot.hurt",
+                "controller.spider_robot":"controller.animation.spider_robot"
+            },
+            "particle_effects": {
+                "hit": "allanz:hit"
+            },
+            "scripts": {
+                "animate": [
+                    "controller.spider_robot"
+                ]
+            },
+            "render_controllers": [
+                "controller.render.spider_robot"
+            ],
+            "spawn_egg": {
+                "base_color": "#394949",
+                "overlay_color": "#2b3071"
+            }
+        }
+    }
+}
